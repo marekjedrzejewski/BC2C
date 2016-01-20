@@ -3,9 +3,6 @@ package jmm.bc2c;
 import android.content.Intent;
 import android.provider.ContactsContract;
 
-/**
- * Created by marek on 06.01.16.
- */
 public class Contact {
 
     // returns intent that has to be started
