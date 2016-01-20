@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void useCamera(View view) {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File f = new File(android.os.Environment.getExternalStorageDirectory(), IntentStorage.CameraTempFile);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+        File cameraTemp = new File(getExternalFilesDir(null), IntentStorage.CameraTempFile);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraTemp));
         startActivityForResult(cameraIntent, LOAD_FROM_CAMERA);
         //startActivity(Contact.CreateContactIntent("Robert Marszałek", "691 163 899"));
     }
