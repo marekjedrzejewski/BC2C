@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,6 +18,8 @@ public class PhotoActivity extends AppCompatActivity {
 
     ImageView photoImageView;
     Bitmap photoImageBitmap;
+    Bitmap tempCanvasBitmap;
+    Canvas photoImageCanvas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +49,12 @@ public class PhotoActivity extends AppCompatActivity {
                         cursor.close();
 
                         photoImageBitmap = BitmapFactory.decodeFile(IntentStorage.CurrentPhotoPath);
-                        photoImageView.setImageBitmap(photoImageBitmap);
+
+                        tempCanvasBitmap = Bitmap.createBitmap(photoImageBitmap.getWidth(), photoImageBitmap.getHeight(), Bitmap.Config.RGB_565);
+                        photoImageCanvas = new Canvas(tempCanvasBitmap);
+                        photoImageCanvas.drawBitmap(photoImageBitmap, 0, 0, null);
+
+                        photoImageView.setImageDrawable(new BitmapDrawable(getResources(), tempCanvasBitmap));
                     }
                 }
 
@@ -55,8 +64,14 @@ public class PhotoActivity extends AppCompatActivity {
 
                 File cameraTemp = new File(getExternalFilesDir(null), IntentStorage.CameraTempFile);
                 IntentStorage.CurrentPhotoPath = cameraTemp.getAbsolutePath();
+
                 photoImageBitmap = BitmapFactory.decodeFile(IntentStorage.CurrentPhotoPath);
-                photoImageView.setImageBitmap(photoImageBitmap);
+
+                tempCanvasBitmap = Bitmap.createBitmap(photoImageBitmap.getWidth(), photoImageBitmap.getHeight(), Bitmap.Config.RGB_565);
+                photoImageCanvas = new Canvas(tempCanvasBitmap);
+                photoImageCanvas.drawBitmap(photoImageBitmap, 0, 0, null);
+
+                photoImageView.setImageDrawable(new BitmapDrawable(getResources(), tempCanvasBitmap));
 
                 break;
 
