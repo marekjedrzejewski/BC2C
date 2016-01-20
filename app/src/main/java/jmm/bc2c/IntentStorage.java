@@ -6,4 +6,6 @@ public class IntentStorage {
 
     public static Intent PhotoIntentData;
 
+    public static final String CameraTempFile = "temp.jpg";
+
 }
