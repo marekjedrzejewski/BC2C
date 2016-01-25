@@ -52,7 +52,7 @@ public class PhotoActivity extends AppCompatActivity {
 
                         tempCanvasBitmap = Bitmap.createBitmap(photoImageBitmap.getWidth(), photoImageBitmap.getHeight(), Bitmap.Config.RGB_565);
                         photoImageCanvas = new Canvas(tempCanvasBitmap);
-                        photoImageCanvas.drawBitmap(photoImageBitmap, 0, 0, null);
+                        photoImageCanvas.drawBitmap(ImagePrep.Prepare(photoImageBitmap), 0, 0, null);
 
                         photoImageView.setImageDrawable(new BitmapDrawable(getResources(), tempCanvasBitmap));
                     }
