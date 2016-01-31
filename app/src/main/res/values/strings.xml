@@ -2,4 +2,29 @@
     <string name="app_name">BC2C</string>
     <string name="title_activity_instructions">Instructions</string>
     <string name="action_settings">Settings</string>
+    <string name="instructions">
+        <![CDATA[
+        <html>
+            <head><style>
+                body {
+                background-color: #222;
+                color: #DDD;
+                }" +
+            </style></head>
+            <body>
+                <p>Follow these instructions to get the best results.</p>
+                <h2>Camera position</h2>
+                <p>Camera should look straight at the surface. Change of perspective
+                 or rotation may lead to weird results. </p>
+                <h2>Light</h2>
+                <p>It\'s best to take photograph in good lighting conditions to avoid
+                 extensive noise.</p>
+                <h2>Contrast</h2>
+                <p>If text is embossed or otherwise hard to read on the photo
+                 it probably also won\'t be readable by app.</p>
+            </body>
+        </html>
+        ]]>
+    </string>
+    <string name="back_to_close">Press back to close this screen</string>
 </resources>
