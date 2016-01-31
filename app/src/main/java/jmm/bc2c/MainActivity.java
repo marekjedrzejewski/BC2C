@@ -1,8 +1,10 @@
 package jmm.bc2c;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,10 +17,19 @@ public class MainActivity extends AppCompatActivity {
     public final static int LOAD_FROM_CAMERA = 1;
     public final static int LOAD_FROM_GALLERY = 2;
 
+    ProgressDialog progressDialog = null;
+
+    public static final String LANG = "pol";
+    public static final String DATA_PATH = Environment.getExternalStorageDirectory().getPath() +
+            "/Android/data/jmm.bc2c/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        CheckAssetsTask checkAssetsTaskTask = new CheckAssetsTask(this);
+        checkAssetsTaskTask.execute();
 
         checkFirstRunAndShowInstructions();
     }
@@ -74,4 +85,22 @@ public class MainActivity extends AppCompatActivity {
         Intent instructions = new Intent(this, Instructions.class);
         startActivity(instructions);
     }
+
+    public void PerformCopyingAssets(){
+        CopyAssetsTask copyAssetsTask = new CopyAssetsTask(this);
+        copyAssetsTask.execute();
+    }
+
+    public void LaunchProgressDialog(String waitText, String reasonText) {
+        progressDialog = ProgressDialog.show(MainActivity.this, waitText, reasonText, true);
+        progressDialog.setCancelable(false);
+    }
+
+    public void KillProgressDialog(){
+        if(progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
 }
