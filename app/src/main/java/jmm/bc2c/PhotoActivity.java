@@ -10,7 +10,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.app.ProgressDialog;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -20,6 +25,8 @@ public class PhotoActivity extends AppCompatActivity {
     Bitmap photoImageBitmap;
     Bitmap tempCanvasBitmap;
     Canvas photoImageCanvas;
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +82,34 @@ public class PhotoActivity extends AppCompatActivity {
 
                 break;
 
+        }
+
+    }
+
+    public void BackButtonClick(View v){
+        this.finish();
+    }
+
+    public void DoOCRButtonClick(View v){
+
+        OCRTask ocrt = new OCRTask(this);
+        ocrt.execute();
+
+    }
+
+    public void ShowResult(String result){
+        Toast.makeText(this,result,Toast.LENGTH_LONG).show();
+    }
+
+    public void LaunchProgressDialog(String waitText, String reasonText) {
+        progressDialog = ProgressDialog.show(PhotoActivity.this, waitText, reasonText, true);
+        progressDialog.setCancelable(false);
+    }
+
+    public void KillProgressDialog(){
+        if(progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
         }
     }
 }
