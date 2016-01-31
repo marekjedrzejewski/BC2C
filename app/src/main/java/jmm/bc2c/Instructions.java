@@ -3,6 +3,7 @@ package jmm.bc2c;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 public class Instructions extends AppCompatActivity {
 
@@ -14,8 +15,13 @@ public class Instructions extends AppCompatActivity {
         setContentView(R.layout.activity_instructions);
 
         webView = (WebView)findViewById(R.id.instructions);
-        String instructions = "<html><body>" +
-                         "<b>Press back to close this screen</b>" +
+        String instructions = "<html><head><style>" +
+                         "body {" +
+                         "background-color: #222;" +
+                         "color: #DDD;" +
+                         "}" +
+                         "</style></head>" +
+                         "<body>" +
                          "<p>Follow these instructions to get the best results.</p>" +
                          "<h2>Camera position</h2>" +
                          "<p>Camera should look straight at the surface. Change of perspective" +
@@ -29,6 +35,7 @@ public class Instructions extends AppCompatActivity {
                          "</body></html>";
         webView.loadData(instructions, "text/html", null);
 
+        Toast.makeText(this, "Press back to close this screen", Toast.LENGTH_SHORT).show();
     }
 
 }
