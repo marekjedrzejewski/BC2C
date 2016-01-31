@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="jmm.bc2c.MainActivity">
+    tools:context="jmm.bc2c.MainActivity"
+    android:background="#212121">
 
     <LinearLayout
         android:orientation="vertical"
@@ -23,7 +24,8 @@
             android:onClick="useCamera"
             android:layout_weight="1"
             android:src="@drawable/ic_camera"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:layout_marginBottom="12dp" />
 
         <ImageButton
             android:layout_width="fill_parent"
@@ -34,7 +36,8 @@
             android:src="@drawable/ic_gallery"
             android:scaleType="fitCenter"
             android:paddingEnd="12dp"
-            android:paddingStart="12dp" />
+            android:paddingStart="12dp"
+            android:layout_marginBottom="12dp" />
 
         <ImageButton
             android:layout_width="fill_parent"
