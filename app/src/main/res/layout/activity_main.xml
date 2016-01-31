@@ -16,28 +16,33 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
 
-        <Button
+        <ImageButton
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="Take Picture"
             android:id="@+id/buttonCamera"
+            android:onClick="useCamera"
             android:layout_weight="1"
-            android:onClick="useCamera" />
+            android:src="@drawable/ic_camera"
+            android:scaleType="fitCenter" />
 
-        <Button
+        <ImageButton
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="Browse for picture"
             android:id="@+id/buttonBrowse"
             android:layout_weight="1"
-            android:onClick="browsePictures" />
+            android:onClick="browsePictures"
+            android:src="@drawable/ic_gallery"
+            android:scaleType="fitCenter"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp" />
 
-        <Button
+        <ImageButton
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Instructions"
             android:id="@+id/buttonInstructions"
-            android:onClick="getInstructions" />
+            android:onClick="getInstructions"
+            android:src="@drawable/ic_instructions"
+            android:scaleType="center" />
     </LinearLayout>
 
 </RelativeLayout>
