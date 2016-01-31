@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkFirstRunAndDisplayInfo();
+        checkFirstRunAndShowInstructions();
     }
 
     public void useCamera(View view) {
@@ -35,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, LOAD_FROM_GALLERY);
+    }
+
+    public void getInstructions(View view) {
+        showInstructions();
     }
 
     @Override
@@ -55,16 +59,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void checkFirstRunAndDisplayInfo() {
+    public void checkFirstRunAndShowInstructions() {
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
         if (isFirstRun) {
-            Intent instructions = new Intent(this, Instructions.class);
-            startActivity(instructions);
-
+                showInstructions();
             getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                     .edit()
                     .putBoolean("isFirstRun", false)
                     .apply();
         }
+    }
+
+    private void showInstructions() {
+        Intent instructions = new Intent(this, Instructions.class);
+        startActivity(instructions);
     }
 }

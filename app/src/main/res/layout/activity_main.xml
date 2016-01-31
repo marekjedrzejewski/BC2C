@@ -31,6 +31,13 @@
             android:id="@+id/buttonBrowse"
             android:layout_weight="1"
             android:onClick="browsePictures" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Instructions"
+            android:id="@+id/buttonInstructions"
+            android:onClick="getInstructions" />
     </LinearLayout>
 
 </RelativeLayout>
