@@ -19,9 +19,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Have to determine somehow if first time launch
-        Intent instructions = new Intent(this, Instructions.class);
-        startActivity(instructions);
+
+        checkFirstRunAndDisplayInfo();
     }
 
     public void useCamera(View view) {
@@ -54,5 +53,18 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    public void checkFirstRunAndDisplayInfo() {
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+        if (isFirstRun) {
+            Intent instructions = new Intent(this, Instructions.class);
+            startActivity(instructions);
+
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isFirstRun", false)
+                    .apply();
+        }
     }
 }
