@@ -19,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Have to determine somehow if first time launch
+        Intent instructions = new Intent(this, Instructions.class);
+        startActivity(instructions);
     }
 
     public void useCamera(View view) {
