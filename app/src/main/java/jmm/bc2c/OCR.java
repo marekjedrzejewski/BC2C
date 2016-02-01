@@ -12,7 +12,9 @@ import java.io.IOException;
 
 public class OCR {
 
-    public String PerformOCR(String path)
+    public enum Type {Whatever, Name, Number};
+
+    public String PerformOCR(String path, Type type)
     {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4;
@@ -67,10 +69,27 @@ public class OCR {
         bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         // _image.setImageBitmap( bitmap );
 
+
         Log.v("OCRed", "Before baseApi");
         bitmap = ImagePrep.Prepare(bitmap);
         TessBaseAPI baseApi = new TessBaseAPI();
-        baseApi.setDebug(true);
+
+        switch(type){
+            case Number:
+                baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "+1234567890");
+                baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_=-qwertyuiop[]}{POIU" +
+                        "YTREWQasdASDfghFGHjklJKLl;L:'\"\\|~`xcvXCVbnmBNM,./<>?ąćęłńóśźż");
+                break;
+            case Name:
+                baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "-qwertyuiopPOIU" +
+                        "YTREWQasdASDfghFGHjklJKLlLxcvXCVbnmBNMąćęłńóśźż");
+                baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "+1234567890!@#$%^&*()_=" +
+                        "[]}{;:'\"\\|~`,./<>?");
+                break;
+            default: break;
+        }
+
+        //baseApi.setDebug(true);
         baseApi.init(MainActivity.DATA_PATH, MainActivity.LANG);
         baseApi.setImage(bitmap);
 
@@ -93,7 +112,7 @@ public class OCR {
 
 }
 
-class OCRTask extends AsyncTask<Void,Void,String>{
+class OCRTask extends AsyncTask<Void,Void,String[]>{
 
     PhotoActivity photoActivity;
 
@@ -110,19 +129,20 @@ class OCRTask extends AsyncTask<Void,Void,String>{
     }
 
     @Override
-    protected void onPostExecute(String s) {
+    protected void onPostExecute(String[] s) {
         super.onPostExecute(s);
         photoActivity.KillProgressDialog();
-        photoActivity.ShowResult(s);
+        photoActivity.startActivity(Contact.CreateContactIntent(s[0],s[1]));
     }
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected String[] doInBackground(Void... params) {
         OCR ocr = new OCR();
         Log.d("OCT","Before OCR");
-        //String result = ocr.PerformOCR(IntentStorage.CurrentPhotoPath);
-        String result = ocr.PerformOCR(IntentStorage.CroppedNamePath);
+        String[] results = new String[2];
+        results[0] = ocr.PerformOCR(IntentStorage.CroppedNamePath,OCR.Type.Name);
+        results[1] = ocr.PerformOCR(IntentStorage.CroppedPhonePath,OCR.Type.Number);
         Log.d("OCT", "After OCR");
-        return result;
+        return results;
     }
 }

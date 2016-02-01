@@ -241,8 +241,8 @@ public class PhotoActivity extends AppCompatActivity {
         ocrt.execute();
     }
 
-    public void ShowResult(String result) {
-        Toast.makeText(this,result,Toast.LENGTH_LONG).show();
+    public void ShowResult(String[] results) {
+        Toast.makeText(this,"Im: "+ results[0]+ " nr: " +results[1],Toast.LENGTH_LONG).show();
     }
 
     public void LaunchProgressDialog(String waitText, String reasonText) {
