@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -46,6 +47,9 @@ public class PhotoActivity extends AppCompatActivity {
     Boolean croppedPhoneFlag = false;
 
     ProgressDialog progressDialog;
+
+    public static final int maxWidth = 500;
+    public static final int maxHeight = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +106,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         photoImageBitmap = Bitmap.createBitmap(photoFileBitmap.getWidth(), photoFileBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         photoImageCanvas = new Canvas(photoImageBitmap);
-        photoImageCanvas.drawBitmap(ImagePrep.Prepare(photoFileBitmap), 0, 0, null);
+        photoImageCanvas.drawBitmap(photoFileBitmap, 0, 0, null);
         photoImageView.setImageBitmap(photoImageBitmap);
 
         paintImageBitmap = Bitmap.createBitmap(photoFileBitmap.getWidth(), photoFileBitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -118,7 +122,7 @@ public class PhotoActivity extends AppCompatActivity {
                 int x = (int) event.getX();
                 int y = (int) event.getY();
 
-                switch(action) {
+                switch (action) {
                     case MotionEvent.ACTION_DOWN:
                         previewTextView.setText("ACTION_DOWN - " + x + " : " + y);
                         setStartPoints((ImageView) iv, photoImageBitmap, x, y);
@@ -182,8 +186,10 @@ public class PhotoActivity extends AppCompatActivity {
 
     public void saveSelection(int whichItem) {
         Bitmap croppedFileBitmap = Bitmap.createBitmap(
-                ImagePrep.Prepare(photoFileBitmap),
+                photoFileBitmap,
                 startX, startY, currentX-startX, currentY-startY);
+
+        croppedFileBitmap = ImagePrep.Prepare(croppedFileBitmap);
 
         File croppedFile;
 
