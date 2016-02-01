@@ -19,7 +19,8 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2">
+            android:weightSum="2"
+            android:layout_marginBottom="@dimen/fab_margin">
 
             <Button
                 android:layout_width="match_parent"
@@ -38,14 +39,6 @@
                 android:layout_weight="1"
                 android:onClick="BackButtonClick" />
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/abc_action_bar_progress_bar_size"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text=""
-            android:id="@+id/previewTextView"
-            android:textColor="#ffffff" />
 
         <RelativeLayout
             android:layout_width="match_parent"

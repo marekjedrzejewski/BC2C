@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -30,7 +29,6 @@ public class PhotoActivity extends AppCompatActivity {
 
     Bitmap photoFileBitmap;
     Bitmap photoFileScaledBitmap;
-    TextView previewTextView;
 
     ImageView photoImageView;
     Bitmap photoImageBitmap;
@@ -65,6 +63,28 @@ public class PhotoActivity extends AppCompatActivity {
 
         loadCurrentPhoto();
         bindImageViews();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("startX", startX);
+        outState.putInt("startY", startY);
+        outState.putInt("currentX", currentX);
+        outState.putInt("currentY", currentY);
+        outState.putBoolean("croppedNameFlag", this.croppedNameFlag);
+        outState.putBoolean("croppedPhoneFlag", this.croppedPhoneFlag);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedState) {
+        super.onRestoreInstanceState(savedState);
+        startX = savedState.getInt("startX");
+        startY = savedState.getInt("startY");
+        currentX = savedState.getInt("currentX");
+        currentY = savedState.getInt("currentY");
+        croppedNameFlag = savedState.getBoolean("croppedNameFlag");
+        croppedPhoneFlag = savedState.getBoolean("croppedPhoneFlag");
     }
 
     private void loadCurrentPhoto() {
@@ -107,7 +127,6 @@ public class PhotoActivity extends AppCompatActivity {
     private void bindImageViews() {
         photoImageView = (ImageView) findViewById(R.id.photoImageView);
         paintImageView = (ImageView) findViewById(R.id.paintImageView);
-        previewTextView = (TextView) findViewById(R.id.previewTextView);
 
         photoFileBitmap = BitmapFactory.decodeFile(IntentStorage.CurrentPhotoPath);
         ImageRatio = Math.min(
@@ -139,15 +158,15 @@ public class PhotoActivity extends AppCompatActivity {
 
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
-                        previewTextView.setText("ACTION_DOWN - " + x + " : " + y);
+                        Log.d("Event", "ACTION_DOWN - " + x + " : " + y);
                         setStartPoints((ImageView) iv, photoImageBitmap, x, y);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        previewTextView.setText("ACTION_MOVE - " + x + " : " + y);
+                        Log.d("Event", "ACTION_MOVE - " + x + " : " + y);
                         drawSelection((ImageView) iv, photoImageBitmap, x, y);
                         break;
                     case MotionEvent.ACTION_UP:
-                        previewTextView.setText("ACTION_UP^^ - " + x + " : " + y);
+                        Log.d("Event", "ACTION_UP - " + x + " : " + y);
                         drawSelection((ImageView) iv, photoImageBitmap, x, y);
                         finalizeSelection();
                         break;
@@ -185,7 +204,7 @@ public class PhotoActivity extends AppCompatActivity {
         paintImageCanvas.drawRect(startX, startY, currentX, currentY, paint);
         paintImageView.invalidate();
 
-        previewTextView.setText(x + " : " + y + " / " + iv.getWidth() + " : " + iv.getHeight() + "\n" +
+        Log.d("Event", x + " : " + y + " / " + iv.getWidth() + " : " + iv.getHeight() + "\n" +
                 startX + "-" + currentX + " : " + startY + "-" + currentY + " / " + bm.getWidth() + " : " + bm.getHeight());
     }
 
@@ -235,9 +254,9 @@ public class PhotoActivity extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
             fos.close();
         } catch (FileNotFoundException e) {
-            Log.d("Error", "File not found: " + e.getMessage());
+            Log.e("Exception", "File not found: " + e.getMessage());
         } catch (IOException e) {
-            Log.d("Error", "Error accessing file: " + e.getMessage());
+            Log.e("Exception", "Error accessing file: " + e.getMessage());
         }
 
         return file;
