@@ -1,30 +1,40 @@
 package jmm.bc2c;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.app.ProgressDialog;
 import android.widget.Toast;
-
 import java.io.File;
 
 public class PhotoActivity extends AppCompatActivity {
 
+    Bitmap photoFileBitmap;
+    TextView previewTextView;
+
     ImageView photoImageView;
     Bitmap photoImageBitmap;
-    Bitmap tempCanvasBitmap;
     Canvas photoImageCanvas;
+
+    ImageView paintImageView;
+    Bitmap paintImageBitmap;
+    Canvas paintImageCanvas;
+
+    int startX, currentX;
+    int startY, currentY;
 
     ProgressDialog progressDialog;
 
@@ -33,12 +43,15 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        photoImageView = (ImageView) findViewById(R.id.photoImageView);
+        loadCurrentPhoto();
+        bindImageViews();
+    }
 
+    private void loadCurrentPhoto() {
         Intent mainIntent = getIntent();
         int loadMode = mainIntent.getIntExtra("LOAD_MODE", 0);
 
-         switch (loadMode) {
+        switch (loadMode) {
 
             case MainActivity.LOAD_FROM_GALLERY:
 
@@ -50,18 +63,9 @@ public class PhotoActivity extends AppCompatActivity {
 
                     if (cursor != null) {
                         cursor.moveToFirst();
-
                         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                         IntentStorage.CurrentPhotoPath = cursor.getString(columnIndex);
                         cursor.close();
-
-                        photoImageBitmap = BitmapFactory.decodeFile(IntentStorage.CurrentPhotoPath);
-
-                        tempCanvasBitmap = Bitmap.createBitmap(photoImageBitmap.getWidth(), photoImageBitmap.getHeight(), Bitmap.Config.RGB_565);
-                        photoImageCanvas = new Canvas(tempCanvasBitmap);
-                        photoImageCanvas.drawBitmap(ImagePrep.Prepare(photoImageBitmap), 0, 0, null);
-
-                        photoImageView.setImageDrawable(new BitmapDrawable(getResources(), tempCanvasBitmap));
                     }
                 }
 
@@ -72,18 +76,70 @@ public class PhotoActivity extends AppCompatActivity {
                 File cameraTemp = new File(getExternalFilesDir(null), IntentStorage.CameraTempFile);
                 IntentStorage.CurrentPhotoPath = cameraTemp.getAbsolutePath();
 
-                photoImageBitmap = BitmapFactory.decodeFile(IntentStorage.CurrentPhotoPath);
-
-                tempCanvasBitmap = Bitmap.createBitmap(photoImageBitmap.getWidth(), photoImageBitmap.getHeight(), Bitmap.Config.RGB_565);
-                photoImageCanvas = new Canvas(tempCanvasBitmap);
-                photoImageCanvas.drawBitmap(photoImageBitmap, 0, 0, null);
-
-                photoImageView.setImageDrawable(new BitmapDrawable(getResources(), tempCanvasBitmap));
-
                 break;
 
-        }
+            default:
 
+                break;
+        }
+    }
+
+    private void bindImageViews() {
+        photoImageView = (ImageView) findViewById(R.id.photoImageView);
+        paintImageView = (ImageView) findViewById(R.id.paintImageView);
+        previewTextView = (TextView) findViewById(R.id.previewTextView);
+
+        photoFileBitmap = BitmapFactory.decodeFile(IntentStorage.CurrentPhotoPath);
+
+        photoImageBitmap = Bitmap.createBitmap(photoFileBitmap.getWidth(), photoFileBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        photoImageCanvas = new Canvas(photoImageBitmap);
+        photoImageCanvas.drawBitmap(ImagePrep.Prepare(photoFileBitmap), 0, 0, null);
+        photoImageView.setImageBitmap(photoImageBitmap);
+
+        paintImageBitmap = Bitmap.createBitmap(photoFileBitmap.getWidth(), photoFileBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        paintImageCanvas = new Canvas(paintImageBitmap);
+        paintImageView.setImageBitmap(paintImageBitmap);
+
+        paintImageView.setOnTouchListener(new View.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View iv, MotionEvent event) {
+
+                int action = event.getAction();
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+
+                switch(action) {
+                    case MotionEvent.ACTION_DOWN:
+                        previewTextView.setText("ACTION_DOWN - " + x + " : " + y);
+                        startX = x;
+                        startY = y;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        previewTextView.setText("ACTION_MOVE - " + x + " : " + y);
+                        drawRectangle((ImageView) iv, x, y);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        previewTextView.setText("ACTION_UP^^ - " + x + " : " + y);
+                        break;
+                }
+
+                return true;
+            }
+
+        });
+    }
+
+    private void drawRectangle(ImageView iv, int x, int y) {
+        paintImageCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.WHITE);
+        paint.setStrokeWidth(3);
+
+        paintImageCanvas.drawRect(startX, startY, x, y, paint);
+        paintImageView.invalidate();
     }
 
     public void BackButtonClick(View v){
