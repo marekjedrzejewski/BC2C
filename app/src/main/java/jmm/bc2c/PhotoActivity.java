@@ -35,6 +35,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     int startX, currentX;
     int startY, currentY;
+    int selectionLineWidth;
 
     ProgressDialog progressDialog;
 
@@ -135,6 +136,7 @@ public class PhotoActivity extends AppCompatActivity {
         if (x >= 0 && x <= iv.getWidth() && y >= 0 && y <= iv.getHeight()) {
             startX = (int)((double)x * ((double)bm.getWidth()/(double)iv.getWidth()));
             startY = (int)((double)y * ((double)bm.getHeight()/(double)iv.getHeight()));
+            selectionLineWidth = (int)(3.0 * ((double)bm.getHeight()/(double)iv.getHeight()));
         }
     }
 
@@ -150,18 +152,18 @@ public class PhotoActivity extends AppCompatActivity {
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.WHITE);
-        paint.setStrokeWidth(3);
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(selectionLineWidth);
 
         paintImageCanvas.drawRect(startX, startY, currentX, currentY, paint);
         paintImageView.invalidate();
 
-        previewTextView.setText(x + ":" + y + "/" + iv.getWidth() + " : " + iv.getHeight() + "\n" +
-                        currentX + " : " + currentY + "/" + bm.getWidth() + " : " + bm.getHeight());
+        previewTextView.setText(x + " : " + y + " / " + iv.getWidth() + " : " + iv.getHeight() + "\n" +
+            startX + "-" + currentX + " : " + startY + "-" + currentY + " / " + bm.getWidth() + " : " + bm.getHeight());
     }
 
     private void finalizeDrawing(){
-        photoImageCanvas.drawBitmap(paintImageBitmap, 0, 0, null);
+        //photoImageCanvas.drawBitmap(paintImageBitmap, 0, 0, null);
     }
 
     public void BackButtonClick(View v){
