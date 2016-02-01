@@ -28,7 +28,6 @@ import java.io.IOException;
 public class PhotoActivity extends AppCompatActivity {
 
     Bitmap photoFileBitmap;
-    Bitmap croppedFileBitmap;
     TextView previewTextView;
 
     ImageView photoImageView;
@@ -42,6 +41,9 @@ public class PhotoActivity extends AppCompatActivity {
     int startX, currentX;
     int startY, currentY;
     int selectionLineWidth;
+
+    Boolean croppedNameFlag = false;
+    Boolean croppedPhoneFlag = false;
 
     ProgressDialog progressDialog;
 
@@ -107,7 +109,7 @@ public class PhotoActivity extends AppCompatActivity {
         paintImageCanvas = new Canvas(paintImageBitmap);
         paintImageView.setImageBitmap(paintImageBitmap);
 
-        paintImageView.setOnTouchListener(new View.OnTouchListener(){
+        paintImageView.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View iv, MotionEvent event) {
@@ -165,21 +167,46 @@ public class PhotoActivity extends AppCompatActivity {
         paintImageView.invalidate();
 
         previewTextView.setText(x + " : " + y + " / " + iv.getWidth() + " : " + iv.getHeight() + "\n" +
-            startX + "-" + currentX + " : " + startY + "-" + currentY + " / " + bm.getWidth() + " : " + bm.getHeight());
+                startX + "-" + currentX + " : " + startY + "-" + currentY + " / " + bm.getWidth() + " : " + bm.getHeight());
     }
 
-    private void finalizeSelection(){
-        if (currentX-startX < 10 || currentY-startY < 10) {
+    private void finalizeSelection() {
+        if (currentX - startX < 10 || currentY - startY < 10) {
+            paintImageCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
             return;
         }
 
-        croppedFileBitmap = Bitmap.createBitmap(ImagePrep.Prepare(photoFileBitmap), startX, startY, currentX-startX, currentY-startY);
+        SelectionDialogFragment sdf = new SelectionDialogFragment();
+        sdf.show(getSupportFragmentManager(), "");
+    }
 
-        File croppedFile = new File(getExternalFilesDir(null), IntentStorage.CroppedNameFile);
+    public void saveSelection(int whichItem) {
+        Bitmap croppedFileBitmap = Bitmap.createBitmap(
+                ImagePrep.Prepare(photoFileBitmap),
+                startX, startY, currentX-startX, currentY-startY);
+
+        File croppedFile;
+
+        switch (whichItem) {
+            case 1:
+                croppedFile = saveBitmap(croppedFileBitmap, IntentStorage.CroppedNameFile);
+                IntentStorage.CroppedNamePath = croppedFile.getAbsolutePath();
+                croppedNameFlag = true;
+                break;
+            case 2:
+                croppedFile = saveBitmap(croppedFileBitmap, IntentStorage.CroppedPhoneFile);
+                IntentStorage.CroppedPhonePath = croppedFile.getAbsolutePath();
+                croppedPhoneFlag = true;
+                break;
+        }
+    }
+
+    private File saveBitmap(Bitmap bitmap, String filename) {
+        File file = new File(getExternalFilesDir(null), filename);
 
         try {
-            FileOutputStream fos = new FileOutputStream(croppedFile);
-            croppedFileBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
             fos.close();
         } catch (FileNotFoundException e) {
             Log.d("Error", "File not found: " + e.getMessage());
@@ -187,21 +214,27 @@ public class PhotoActivity extends AppCompatActivity {
             Log.d("Error", "Error accessing file: " + e.getMessage());
         }
 
-        IntentStorage.CroppedNamePath = croppedFile.getAbsolutePath();
+        return file;
     }
 
-    public void BackButtonClick(View v){
+    public void BackButtonClick(View v) {
         this.finish();
     }
 
-    public void DoOCRButtonClick(View v){
+    public void DoOCRButtonClick(View v) {
+        if (!croppedNameFlag) {
+            Toast.makeText(this, getString(R.string.select_name), Toast.LENGTH_LONG).show();
+            return;
+        } else if (!croppedPhoneFlag) {
+            Toast.makeText(this, getString(R.string.select_phone), Toast.LENGTH_LONG).show();
+            return;
+        }
 
         OCRTask ocrt = new OCRTask(this);
         ocrt.execute();
-
     }
 
-    public void ShowResult(String result){
+    public void ShowResult(String result) {
         Toast.makeText(this,result,Toast.LENGTH_LONG).show();
     }
 
@@ -210,8 +243,8 @@ public class PhotoActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
     }
 
-    public void KillProgressDialog(){
-        if(progressDialog != null){
+    public void KillProgressDialog() {
+        if(progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
         }

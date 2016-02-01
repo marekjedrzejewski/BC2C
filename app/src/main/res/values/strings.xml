@@ -14,8 +14,8 @@
             <body>
                  <p>Follow these instructions to get the best results.</p>
                  <h2>Camera position</h2>
-                 <p>Camera should look straight at the surface. Change of perspective
-                 or rotation may lead to weird results. </p>
+                 <p>Camera should look straight at the surface.
+                 Change of perspective or rotation may lead to weird results.</p>
                  <h2>Light</h2>
                  <p>It\'s best to take photograph in good lighting conditions to avoid
                  extensive noise.</p>
@@ -25,7 +25,7 @@
                  <h2>Size does matter</h2>
                  <p>If picture is too small, text won't be recognized.</p>
                  <h2>Handwriting</h2>
-                 <p>App does not handle handwriting well, as well as fonts that look like it</p>
+                 <p>App does not handle handwriting well, as well as fonts that look like it.</p>
             </body>
         </html>
         ]]>
@@ -38,4 +38,10 @@
     <string name="tess_lang">eng</string>
     <string name="ocr_button">Perform OCR</string>
     <string name="back_button">Back to menu</string>
+    <string name="selected_data_question">What data is selected?</string>
+    <string name="selected_nothing">(nothing)</string>
+    <string name="selected_name">Name</string>
+    <string name="selected_phone">Phone</string>
+    <string name="select_name">Firstly, select the name!</string>
+    <string name="select_phone">Firstly, select the phone!</string>
 </resources>

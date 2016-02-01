@@ -22,23 +22,27 @@
                 }
             </style></head>
             <body>
-                 <p>Dla uzyskania najlepszych rezultatów trzymaj się poniższych instrukcji</p>
+                 <p>Dla uzyskania najlepszych rezultatów trzymaj się poniższych instrukcji.</p>
                  <h2>Pozycja aparatu</h2>
-                 <p> Aparat powinien być skierowany prosto na powierzchnię. Zmiany
-                 perspektywy, lub obrotu mogą prowadzić do dziwnych odczytów.
-                 </p>
+                 <p>Aparat powinien być skierowany prosto na powierzchnię.
+                 Zmiany perspektywy lub obrotu mogą prowadzić do dziwnych odczytów.</p>
                  <h2>Światło</h2>
-                 <p>Najlepiej fotografować w dobrych warunkach świetlnych, aby
-                 uniknąć nadmiernego zaszumienia zdjęcia</p>
+                 <p>Najlepiej fotografować w dobrych warunkach świetlnych,
+                 aby uniknąć nadmiernego zaszumienia zdjęcia.</p>
                  <h2>Kontrast</h2>
-                 <p> Jeśli tekst jest wytłoczony, lub w jakiś inny sposób ciężki do odczytania na
-                 zdjęciu, będzie także ciężki do odczytania przez aplikację.
-                 </p>
+                 <p>Jeśli tekst jest wytłoczony lub w jakiś inny sposób trudny do odczytania
+                 na zdjęciu, będzie także trudny do odczytania przez aplikację.</p>
                  <h2>Rozmiar ma znaczenie</h2>
-                 <p>Jeśli obraz będzie za mały znaki nie zostaną odczytane.</p>
+                 <p>Jeśli obraz będzie za mały, znaki nie zostaną odczytane.</p>
                  <h2>Pismo odręczne</h2>
-                 <p>Aplikacja nie radzi sobie dobrze z pismem odręcznym i czcionkami imitującymi je</p>
+                 <p>Aplikacja nie radzi sobie dobrze z pismem odręcznym i czcionkami go imitującym.</p>
             </body>
         </html>
         ]]></string>
+    <string name="selected_data_question">Jakie dane zaznaczono?</string>
+    <string name="selected_nothing">(nic)</string>
+    <string name="selected_name">Nazwisko</string>
+    <string name="selected_phone">Telefon</string>
+    <string name="select_name">Najpierw zaznacz nazwisko!</string>
+    <string name="select_phone">Najpierw zaznacz telefon!</string>
 </resources>
