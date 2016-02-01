@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BC2C</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="back_to_close">Wciśnij wstecz, aby zamknąć ten ekran</string>
+    <string name="check_progress">Sprawdzanie plików językowych</string>
+    <string name="copy_progress">Kopiowanie plików językowych</string>
+    <string name="ocr_progress">Wykonywanie OCR</string>
+    <string name="tess_lang">pol</string>
+    <string name="title_activity_instructions">Instrukcje</string>
+    <string name="wait_progress">Proszę czekać...</string>
+    <string name="ocr_button">Wykonaj OCR</string>
+    <string name="back_button">Powrót do menu</string>
+</resources>

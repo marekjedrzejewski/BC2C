@@ -120,7 +120,9 @@ class CheckAssetsTask extends AsyncTask<Void,Void,Boolean>{
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mainActivity.LaunchProgressDialog("Please wait...", "Checking langauge files");
+        String waitText = mainActivity.getString(R.string.wait_progress);
+        String reasonText = mainActivity.getString(R.string.check_progress);
+        mainActivity.LaunchProgressDialog(waitText,reasonText);
     }
 
     @Override
@@ -156,7 +158,9 @@ class CopyAssetsTask extends AsyncTask<Void, Void, Void>{
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mainActivity.LaunchProgressDialog("Please wait...", "Copying language files");
+        String waitText = mainActivity.getString(R.string.wait_progress);
+        String reasonText = mainActivity.getString(R.string.copy_progress);
+        mainActivity.LaunchProgressDialog(waitText,reasonText);
     }
 
     @Override

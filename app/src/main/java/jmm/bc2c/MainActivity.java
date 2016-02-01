@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     ProgressDialog progressDialog = null;
 
-    public static final String LANG = "pol";
+    public static String LANG = "eng";
     public static final String DATA_PATH = Environment.getExternalStorageDirectory().getPath() +
             "/Android/data/jmm.bc2c/";
 
@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        LANG = getString(R.string.tess_lang);
 
         CheckAssetsTask checkAssetsTaskTask = new CheckAssetsTask(this);
         checkAssetsTaskTask.execute();

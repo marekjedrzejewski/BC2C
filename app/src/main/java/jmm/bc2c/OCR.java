@@ -104,7 +104,9 @@ class OCRTask extends AsyncTask<Void,Void,String>{
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        photoActivity.LaunchProgressDialog("Please wait...", "Performing OCR");
+        String waitText = photoActivity.getString(R.string.wait_progress);
+        String reasonText = photoActivity.getString(R.string.ocr_progress);
+        photoActivity.LaunchProgressDialog(waitText,reasonText);
     }
 
     @Override

@@ -24,7 +24,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Do OCR"
+                android:text="@string/ocr_button"
                 android:id="@+id/OCRButton"
                 android:layout_gravity="center_horizontal"
                 android:onClick="DoOCRButtonClick"
@@ -33,7 +33,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Back to Menu"
+                android:text="@string/back_button"
                 android:id="@+id/BackButton"
                 android:layout_weight="1"
                 android:onClick="BackButtonClick" />
