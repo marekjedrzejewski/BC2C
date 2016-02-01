@@ -9,11 +9,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +29,7 @@ import java.io.IOException;
 public class PhotoActivity extends AppCompatActivity {
 
     Bitmap photoFileBitmap;
+    Bitmap photoFileScaledBitmap;
     TextView previewTextView;
 
     ImageView photoImageView;
@@ -48,13 +49,19 @@ public class PhotoActivity extends AppCompatActivity {
 
     ProgressDialog progressDialog;
 
-    public static final int maxWidth = 500;
-    public static final int maxHeight = 500;
+    public static int ImageSize;
+    public static float ImageRatio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+        ImageSize = Math.max(height, width);
 
         loadCurrentPhoto();
         bindImageViews();
@@ -102,15 +109,22 @@ public class PhotoActivity extends AppCompatActivity {
         paintImageView = (ImageView) findViewById(R.id.paintImageView);
         previewTextView = (TextView) findViewById(R.id.previewTextView);
 
-        photoFileBitmap = ImagePrep.DecodeSampleBitmapFile(IntentStorage.CurrentPhotoPath,
-                                                            maxWidth,maxHeight);
+        photoFileBitmap = BitmapFactory.decodeFile(IntentStorage.CurrentPhotoPath);
+        ImageRatio = Math.min(
+                (float) ImageSize / photoFileBitmap.getWidth(),
+                (float) ImageSize / photoFileBitmap.getHeight());
+        photoFileScaledBitmap = Bitmap.createScaledBitmap(photoFileBitmap,
+                Math.round(ImageRatio * photoFileBitmap.getWidth()),
+                Math.round(ImageRatio * photoFileBitmap.getHeight()), true);
 
-        photoImageBitmap = Bitmap.createBitmap(photoFileBitmap.getWidth(), photoFileBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        photoImageBitmap = Bitmap.createBitmap(photoFileScaledBitmap.getWidth(),
+                photoFileScaledBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         photoImageCanvas = new Canvas(photoImageBitmap);
-        photoImageCanvas.drawBitmap(photoFileBitmap, 0, 0, null);
+        photoImageCanvas.drawBitmap(photoFileScaledBitmap, 0, 0, null);
         photoImageView.setImageBitmap(photoImageBitmap);
 
-        paintImageBitmap = Bitmap.createBitmap(photoFileBitmap.getWidth(), photoFileBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        paintImageBitmap = Bitmap.createBitmap(photoFileScaledBitmap.getWidth(),
+                photoFileScaledBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         paintImageCanvas = new Canvas(paintImageBitmap);
         paintImageView.setImageBitmap(paintImageBitmap);
 
@@ -186,21 +200,26 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void saveSelection(int whichItem) {
-        Bitmap croppedFileBitmap = Bitmap.createBitmap(
-                photoFileBitmap,
-                startX, startY, currentX-startX, currentY-startY);
-
-        croppedFileBitmap = ImagePrep.Prepare(croppedFileBitmap);
-
+        Bitmap croppedFileBitmap;
         File croppedFile;
+
+        int x = Math.round(startX / ImageRatio);
+        int y = Math.round(startY / ImageRatio);
+        int w = Math.round((currentX - startX) / ImageRatio);
+        int h = Math.round((currentY - startY) / ImageRatio);
 
         switch (whichItem) {
             case 1:
+                croppedFileBitmap = Bitmap.createBitmap(photoFileBitmap, x, y, w, h);
+                croppedFileBitmap = ImagePrep.Prepare(croppedFileBitmap);
                 croppedFile = saveBitmap(croppedFileBitmap, IntentStorage.CroppedNameFile);
                 IntentStorage.CroppedNamePath = croppedFile.getAbsolutePath();
                 croppedNameFlag = true;
                 break;
+
             case 2:
+                croppedFileBitmap = Bitmap.createBitmap(photoFileBitmap, x, y, w, h);
+                croppedFileBitmap = ImagePrep.Prepare(croppedFileBitmap);
                 croppedFile = saveBitmap(croppedFileBitmap, IntentStorage.CroppedPhoneFile);
                 IntentStorage.CroppedPhonePath = croppedFile.getAbsolutePath();
                 croppedPhoneFlag = true;
