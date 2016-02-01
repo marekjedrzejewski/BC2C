@@ -12,16 +12,20 @@
                 }" +
             </style></head>
             <body>
-                <p>Follow these instructions to get the best results.</p>
-                <h2>Camera position</h2>
-                <p>Camera should look straight at the surface. Change of perspective
+                 <p>Follow these instructions to get the best results.</p>
+                 <h2>Camera position</h2>
+                 <p>Camera should look straight at the surface. Change of perspective
                  or rotation may lead to weird results. </p>
-                <h2>Light</h2>
-                <p>It\'s best to take photograph in good lighting conditions to avoid
+                 <h2>Light</h2>
+                 <p>It\'s best to take photograph in good lighting conditions to avoid
                  extensive noise.</p>
-                <h2>Contrast</h2>
-                <p>If text is embossed or otherwise hard to read on the photo
+                 <h2>Contrast</h2>
+                 <p>If text is embossed or otherwise hard to read on the photo
                  it probably also won\'t be readable by app.</p>
+                 <h2>Size does matter</h2>
+                 <p>If picture is too small, text won't be recognized.</p>
+                 <h2>Handwriting</h2>
+                 <p>App does not handle handwriting well, as well as fonts that look like it</p>
             </body>
         </html>
         ]]>
