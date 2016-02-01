@@ -39,12 +39,40 @@
                 android:onClick="BackButtonClick" />
         </LinearLayout>
 
-        <ImageView
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/photoImageView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            android:layout_height="@dimen/abc_action_bar_progress_bar_size"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text=""
+            android:id="@+id/previewTextView"
+            android:textColor="#ffffff" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/photoImageView"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+            <ImageView
+                android:id="@+id/paintImageView"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignLeft="@id/photoImageView"
+                android:layout_alignTop="@id/photoImageView"
+                android:layout_alignRight="@id/photoImageView"
+                android:layout_alignBottom="@id/photoImageView" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
