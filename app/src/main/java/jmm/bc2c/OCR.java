@@ -73,11 +73,14 @@ public class OCR {
         Log.v("OCRed", "Before baseApi");
         bitmap = ImagePrep.Prepare(bitmap);
         TessBaseAPI baseApi = new TessBaseAPI();
+        //baseApi.setDebug(true);
+        baseApi.init(MainActivity.DATA_PATH, MainActivity.LANG);
+        baseApi.setImage(bitmap);
 
         switch(type){
             case Number:
-                baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "+1234567890");
-                baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_=-qwertyuiop[]}{POIU" +
+                baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "+1234567890()");
+                baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*_=-qwertyuiop[]}{POIU" +
                         "YTREWQasdASDfghFGHjklJKLl;L:'\"\\|~`xcvXCVbnmBNM,./<>?ąćęłńóśźż");
                 break;
             case Name:
@@ -89,9 +92,6 @@ public class OCR {
             default: break;
         }
 
-        //baseApi.setDebug(true);
-        baseApi.init(MainActivity.DATA_PATH, MainActivity.LANG);
-        baseApi.setImage(bitmap);
 
         String recognizedText = baseApi.getUTF8Text();
 
