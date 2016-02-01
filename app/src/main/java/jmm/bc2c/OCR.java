@@ -120,7 +120,8 @@ class OCRTask extends AsyncTask<Void,Void,String>{
     protected String doInBackground(Void... params) {
         OCR ocr = new OCR();
         Log.d("OCT","Before OCR");
-        String result = ocr.PerformOCR(IntentStorage.CurrentPhotoPath);
+        //String result = ocr.PerformOCR(IntentStorage.CurrentPhotoPath);
+        String result = ocr.PerformOCR(IntentStorage.CroppedNamePath);
         Log.d("OCT", "After OCR");
         return result;
     }

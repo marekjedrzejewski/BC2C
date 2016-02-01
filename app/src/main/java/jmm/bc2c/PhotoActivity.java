@@ -13,16 +13,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class PhotoActivity extends AppCompatActivity {
 
     Bitmap photoFileBitmap;
+    Bitmap croppedFileBitmap;
     TextView previewTextView;
 
     ImageView photoImageView;
@@ -54,6 +60,13 @@ public class PhotoActivity extends AppCompatActivity {
 
         switch (loadMode) {
 
+            case MainActivity.LOAD_FROM_CAMERA:
+
+                File cameraTemp = new File(getExternalFilesDir(null), IntentStorage.CameraTempFile);
+                IntentStorage.CurrentPhotoPath = cameraTemp.getAbsolutePath();
+
+                break;
+
             case MainActivity.LOAD_FROM_GALLERY:
 
                 if (IntentStorage.PhotoIntentData != null) {
@@ -69,13 +82,6 @@ public class PhotoActivity extends AppCompatActivity {
                         cursor.close();
                     }
                 }
-
-                break;
-
-            case MainActivity.LOAD_FROM_CAMERA:
-
-                File cameraTemp = new File(getExternalFilesDir(null), IntentStorage.CameraTempFile);
-                IntentStorage.CurrentPhotoPath = cameraTemp.getAbsolutePath();
 
                 break;
 
@@ -117,12 +123,12 @@ public class PhotoActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         previewTextView.setText("ACTION_MOVE - " + x + " : " + y);
-                        drawRectangle((ImageView) iv, photoImageBitmap, x, y);
+                        drawSelection((ImageView) iv, photoImageBitmap, x, y);
                         break;
                     case MotionEvent.ACTION_UP:
                         previewTextView.setText("ACTION_UP^^ - " + x + " : " + y);
-                        drawRectangle((ImageView) iv, photoImageBitmap, x, y);
-                        finalizeDrawing();
+                        drawSelection((ImageView) iv, photoImageBitmap, x, y);
+                        finalizeSelection();
                         break;
                 }
 
@@ -140,7 +146,7 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
-    private void drawRectangle(ImageView iv, Bitmap bm, int x, int y) {
+    private void drawSelection(ImageView iv, Bitmap bm, int x, int y) {
         if (x >= 0 && x <= iv.getWidth() && y >= 0 && y <= iv.getHeight()) {
             currentX = (int)((double)x * ((double)bm.getWidth()/(double)iv.getWidth()));
             currentY = (int)((double)y * ((double)bm.getHeight()/(double)iv.getHeight()));
@@ -162,8 +168,26 @@ public class PhotoActivity extends AppCompatActivity {
             startX + "-" + currentX + " : " + startY + "-" + currentY + " / " + bm.getWidth() + " : " + bm.getHeight());
     }
 
-    private void finalizeDrawing(){
-        //photoImageCanvas.drawBitmap(paintImageBitmap, 0, 0, null);
+    private void finalizeSelection(){
+        if (currentX-startX < 10 || currentY-startY < 10) {
+            return;
+        }
+
+        croppedFileBitmap = Bitmap.createBitmap(ImagePrep.Prepare(photoFileBitmap), startX, startY, currentX-startX, currentY-startY);
+
+        File croppedFile = new File(getExternalFilesDir(null), IntentStorage.CroppedNameFile);
+
+        try {
+            FileOutputStream fos = new FileOutputStream(croppedFile);
+            croppedFileBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.d("Error", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("Error", "Error accessing file: " + e.getMessage());
+        }
+
+        IntentStorage.CroppedNamePath = croppedFile.getAbsolutePath();
     }
 
     public void BackButtonClick(View v){
