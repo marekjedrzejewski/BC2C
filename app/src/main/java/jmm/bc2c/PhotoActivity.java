@@ -72,6 +72,7 @@ public class PhotoActivity extends AppCompatActivity {
         outState.putInt("startY", startY);
         outState.putInt("currentX", currentX);
         outState.putInt("currentY", currentY);
+        outState.putInt("selectionLineWidth", selectionLineWidth);
         outState.putBoolean("croppedNameFlag", this.croppedNameFlag);
         outState.putBoolean("croppedPhoneFlag", this.croppedPhoneFlag);
     }
@@ -83,8 +84,10 @@ public class PhotoActivity extends AppCompatActivity {
         startY = savedState.getInt("startY");
         currentX = savedState.getInt("currentX");
         currentY = savedState.getInt("currentY");
+        selectionLineWidth = savedState.getInt("selectionLineWidth");
         croppedNameFlag = savedState.getBoolean("croppedNameFlag");
         croppedPhoneFlag = savedState.getBoolean("croppedPhoneFlag");
+        redrawSelections();
     }
 
     private void loadCurrentPhoto() {
@@ -180,21 +183,21 @@ public class PhotoActivity extends AppCompatActivity {
 
     private void setStartPoints(ImageView iv, Bitmap bm, int x, int y) {
         if (x >= 0 && x <= iv.getWidth() && y >= 0 && y <= iv.getHeight()) {
-            startX = (int)((double)x * ((double)bm.getWidth()/(double)iv.getWidth()));
-            startY = (int)((double)y * ((double)bm.getHeight()/(double)iv.getHeight()));
-            selectionLineWidth = (int)(3.0 * ((double)bm.getHeight()/(double)iv.getHeight()));
+            startX = (int)((double)x * ((double)bm.getWidth() / (double)iv.getWidth()));
+            startY = (int)((double)y * ((double)bm.getHeight() / (double)iv.getHeight()));
+            selectionLineWidth = (int)(3.0 * ((double)bm.getHeight() / (double)iv.getHeight()));
         }
     }
 
     private void drawSelection(ImageView iv, Bitmap bm, int x, int y) {
         if (x >= 0 && x <= iv.getWidth() && y >= 0 && y <= iv.getHeight()) {
-            currentX = (int)((double)x * ((double)bm.getWidth()/(double)iv.getWidth()));
-            currentY = (int)((double)y * ((double)bm.getHeight()/(double)iv.getHeight()));
+            currentX = (int)((double)x * ((double)bm.getWidth() / (double)iv.getWidth()));
+            currentY = (int)((double)y * ((double)bm.getHeight() / (double)iv.getHeight()));
         } else {
             return;
         }
 
-        paintImageCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        redrawSelections();
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
@@ -208,9 +211,36 @@ public class PhotoActivity extends AppCompatActivity {
                 startX + "-" + currentX + " : " + startY + "-" + currentY + " / " + bm.getWidth() + " : " + bm.getHeight());
     }
 
+    private void redrawSelections() {
+        paintImageCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.GREEN);
+        paint.setStrokeWidth(selectionLineWidth);
+
+        if (croppedNameFlag) {
+            int name_x1 = Math.round(IntentStorage.CroppedNameX * ImageRatio);
+            int name_y1 = Math.round(IntentStorage.CroppedNameY * ImageRatio);
+            int name_x2 = Math.round((IntentStorage.CroppedNameX + IntentStorage.CroppedNameW) * ImageRatio);
+            int name_y2 = Math.round((IntentStorage.CroppedNameY + IntentStorage.CroppedNameH) * ImageRatio);
+            paintImageCanvas.drawRect(name_x1, name_y1, name_x2, name_y2, paint);
+        }
+
+        if (croppedPhoneFlag) {
+            int phone_x1 = Math.round(IntentStorage.CroppedPhoneX * ImageRatio);
+            int phone_y1 = Math.round(IntentStorage.CroppedPhoneY * ImageRatio);
+            int phone_x2 = Math.round((IntentStorage.CroppedPhoneX + IntentStorage.CroppedPhoneW) * ImageRatio);
+            int phone_y2 = Math.round((IntentStorage.CroppedPhoneY + IntentStorage.CroppedPhoneH) * ImageRatio);
+            paintImageCanvas.drawRect(phone_x1, phone_y1, phone_x2, phone_y2, paint);
+        }
+
+        paintImageView.invalidate();
+    }
+
     private void finalizeSelection() {
         if (currentX - startX < 10 || currentY - startY < 10) {
-            paintImageCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            redrawSelections();
             return;
         }
 
@@ -234,6 +264,10 @@ public class PhotoActivity extends AppCompatActivity {
                 croppedFile = saveBitmap(croppedFileBitmap, IntentStorage.CroppedNameFile);
                 IntentStorage.CroppedNamePath = croppedFile.getAbsolutePath();
                 croppedNameFlag = true;
+                IntentStorage.CroppedNameX = x;
+                IntentStorage.CroppedNameY = y;
+                IntentStorage.CroppedNameW = w;
+                IntentStorage.CroppedNameH = h;
                 break;
 
             case 2:
@@ -242,8 +276,14 @@ public class PhotoActivity extends AppCompatActivity {
                 croppedFile = saveBitmap(croppedFileBitmap, IntentStorage.CroppedPhoneFile);
                 IntentStorage.CroppedPhonePath = croppedFile.getAbsolutePath();
                 croppedPhoneFlag = true;
+                IntentStorage.CroppedPhoneX = x;
+                IntentStorage.CroppedPhoneY = y;
+                IntentStorage.CroppedPhoneW = w;
+                IntentStorage.CroppedPhoneH = h;
                 break;
         }
+
+        redrawSelections();
     }
 
     private File saveBitmap(Bitmap bitmap, String filename) {
