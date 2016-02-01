@@ -102,7 +102,8 @@ public class PhotoActivity extends AppCompatActivity {
         paintImageView = (ImageView) findViewById(R.id.paintImageView);
         previewTextView = (TextView) findViewById(R.id.previewTextView);
 
-        photoFileBitmap = BitmapFactory.decodeFile(IntentStorage.CurrentPhotoPath);
+        photoFileBitmap = ImagePrep.DecodeSampleBitmapFile(IntentStorage.CurrentPhotoPath,
+                                                            maxWidth,maxHeight);
 
         photoImageBitmap = Bitmap.createBitmap(photoFileBitmap.getWidth(), photoFileBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         photoImageCanvas = new Canvas(photoImageBitmap);

@@ -75,13 +75,21 @@ public class ImagePrep {
     }
 
     public static Bitmap DecodeSampleBitmapFile(String imagePath,
-                                                         int reqWidth, int reqHeight) {
+                                                         int maxWidth, int maxHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(imagePath, options);
-
+        int reqWidth = maxWidth;
+        int reqHeight = maxHeight;
+        int ratio = options.outWidth/options.outHeight;
+        if(options.outWidth > options.outHeight){
+            reqHeight = reqWidth/ratio;
+        }
+        else{
+            reqWidth = reqHeight*ratio;
+        }
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
