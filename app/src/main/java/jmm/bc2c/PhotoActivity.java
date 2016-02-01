@@ -112,15 +112,16 @@ public class PhotoActivity extends AppCompatActivity {
                 switch(action) {
                     case MotionEvent.ACTION_DOWN:
                         previewTextView.setText("ACTION_DOWN - " + x + " : " + y);
-                        startX = x;
-                        startY = y;
+                        setStartPoints((ImageView) iv, photoImageBitmap, x, y);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         previewTextView.setText("ACTION_MOVE - " + x + " : " + y);
-                        drawRectangle((ImageView) iv, x, y);
+                        drawRectangle((ImageView) iv, photoImageBitmap, x, y);
                         break;
                     case MotionEvent.ACTION_UP:
                         previewTextView.setText("ACTION_UP^^ - " + x + " : " + y);
+                        drawRectangle((ImageView) iv, photoImageBitmap, x, y);
+                        finalizeDrawing();
                         break;
                 }
 
@@ -130,7 +131,21 @@ public class PhotoActivity extends AppCompatActivity {
         });
     }
 
-    private void drawRectangle(ImageView iv, int x, int y) {
+    private void setStartPoints(ImageView iv, Bitmap bm, int x, int y) {
+        if (x >= 0 && x <= iv.getWidth() && y >= 0 && y <= iv.getHeight()) {
+            startX = (int)((double)x * ((double)bm.getWidth()/(double)iv.getWidth()));
+            startY = (int)((double)y * ((double)bm.getHeight()/(double)iv.getHeight()));
+        }
+    }
+
+    private void drawRectangle(ImageView iv, Bitmap bm, int x, int y) {
+        if (x >= 0 && x <= iv.getWidth() && y >= 0 && y <= iv.getHeight()) {
+            currentX = (int)((double)x * ((double)bm.getWidth()/(double)iv.getWidth()));
+            currentY = (int)((double)y * ((double)bm.getHeight()/(double)iv.getHeight()));
+        } else {
+            return;
+        }
+
         paintImageCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
         Paint paint = new Paint();
@@ -138,8 +153,15 @@ public class PhotoActivity extends AppCompatActivity {
         paint.setColor(Color.WHITE);
         paint.setStrokeWidth(3);
 
-        paintImageCanvas.drawRect(startX, startY, x, y, paint);
+        paintImageCanvas.drawRect(startX, startY, currentX, currentY, paint);
         paintImageView.invalidate();
+
+        previewTextView.setText(x + ":" + y + "/" + iv.getWidth() + " : " + iv.getHeight() + "\n" +
+                        currentX + " : " + currentY + "/" + bm.getWidth() + " : " + bm.getHeight());
+    }
+
+    private void finalizeDrawing(){
+        photoImageCanvas.drawBitmap(paintImageBitmap, 0, 0, null);
     }
 
     public void BackButtonClick(View v){
