@@ -11,4 +11,34 @@
     <string name="wait_progress">Proszę czekać...</string>
     <string name="ocr_button">Wykonaj OCR</string>
     <string name="back_button">Powrót do menu</string>
+    <string name="instructions"><![CDATA[
+        <html>
+            <head>
+            <meta charset=\"utf-8\">
+            <style>
+                body {
+                background-color: #222;
+                color: #DDD;
+                }
+            </style></head>
+            <body>
+                 <p>Dla uzyskania najlepszych rezultatów trzymaj się poniższych instrukcji</p>
+                 <h2>Pozycja aparatu</h2>
+                 <p> Aparat powinien być skierowany prosto na powierzchnię. Zmiany
+                 perspektywy, lub obrotu mogą prowadzić do dziwnych odczytów.
+                 </p>
+                 <h2>Światło</h2>
+                 <p>Najlepiej fotografować w dobrych warunkach świetlnych, aby
+                 uniknąć nadmiernego zaszumienia zdjęcia</p>
+                 <h2>Kontrast</h2>
+                 <p> Jeśli tekst jest wytłoczony, lub w jakiś inny sposób ciężki do odczytania na
+                 zdjęciu, będzie także ciężki do odczytania przez aplikację.
+                 </p>
+                 <h2>Rozmiar ma znaczenie</h2>
+                 <p>Jeśli obraz będzie za mały znaki nie zostaną odczytane.</p>
+                 <h2>Pismo odręczne</h2>
+                 <p>Aplikacja nie radzi sobie dobrze z pismem odręcznym i czcionkami imitującymi je</p>
+            </body>
+        </html>
+        ]]></string>
 </resources>

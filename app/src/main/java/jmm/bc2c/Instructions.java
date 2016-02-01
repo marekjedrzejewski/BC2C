@@ -18,7 +18,7 @@ public class Instructions extends AppCompatActivity {
 
         webView.getSettings();
         webView.setBackgroundColor(0x212121);
-        webView.loadData(getString(R.string.instructions), "text/html", null);
+        webView.loadData(getString(R.string.instructions), "text/html; charset=utf-8", "UTF-8");
 
         Toast.makeText(this, getString(R.string.back_to_close), Toast.LENGTH_SHORT).show();
     }
