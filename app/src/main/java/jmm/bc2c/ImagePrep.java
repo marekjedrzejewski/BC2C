@@ -8,9 +8,19 @@ import com.googlecode.leptonica.android.Pix;
 import com.googlecode.leptonica.android.ReadFile;
 import com.googlecode.leptonica.android.WriteFile;
 
+
+
 public class ImagePrep {
+
+    public final static int OTSU_SIZE_X = 32;
+    public final static int OTSU_SIZE_Y = 32;
+    public final static int OTSU_SMOOTH_X = 1;
+    public final static int OTSU_SMOOTH_Y = 1;
+    public final static float OTSU_SCORE_FRACTION = 0.1f;
+
     public static Bitmap Prepare(Bitmap image) {
-        return binarize(toGrayscale(image));
+        //return binarize(toGrayscale(image));
+        return toGrayscale(image);
     }
 
 //    public static Bitmap toGrayscale(Bitmap image)
@@ -38,7 +48,8 @@ public class ImagePrep {
 
     public static Bitmap binarize(Bitmap image) {
         Pix imagepix = ReadFile.readBitmap(image);
-        imagepix = Binarize.otsuAdaptiveThreshold(imagepix);
+        imagepix = Binarize.otsuAdaptiveThreshold(imagepix, OTSU_SIZE_X, OTSU_SIZE_Y,
+                OTSU_SMOOTH_X, OTSU_SMOOTH_Y, OTSU_SCORE_FRACTION);
         return WriteFile.writeBitmap(imagepix);
     }
 

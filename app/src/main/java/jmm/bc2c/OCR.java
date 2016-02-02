@@ -79,9 +79,9 @@ public class OCR {
 
         switch(type){
             case Number:
-                baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "+1234567890()");
-                baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*_=-qwertyuiop[]}{POIU" +
-                        "YTREWQasdASDfghFGHjklJKLl;L:'\"\\|~`xcvXCVbnmBNM,./<>?ąćęłńóśźż");
+                baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "+1234567890()/\\-");
+                baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*_=qwertyuiop[]}{POIU" +
+                        "YTREWQasdASDfghFGHjklJKLl;L:'\"|~`xcvXCVbnmBNM,.<>?ąćęłńóśźż");
                 break;
             case Name:
                 baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "-qwertyuiopPOIU" +
@@ -105,6 +105,9 @@ public class OCR {
 
         if ( MainActivity.LANG.equalsIgnoreCase("eng") ) {
             recognizedText = recognizedText.replaceAll("[^a-zA-Z0-9]+", " ");
+        }
+        if(type == Type.Number){
+            recognizedText.replaceAll("[^0-9+]+", "");
         }
 
         return recognizedText.trim();
