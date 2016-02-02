@@ -71,7 +71,6 @@ public class OCR {
 
 
         Log.v("OCRed", "Before baseApi");
-        bitmap = ImagePrep.Prepare(bitmap);
         TessBaseAPI baseApi = new TessBaseAPI();
         //baseApi.setDebug(true);
         baseApi.init(MainActivity.DATA_PATH, MainActivity.LANG);

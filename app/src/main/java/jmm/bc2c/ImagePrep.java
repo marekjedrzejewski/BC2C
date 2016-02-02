@@ -2,8 +2,10 @@ package jmm.bc2c;
 
 import android.graphics.Bitmap;
 
+import com.googlecode.leptonica.android.AdaptiveMap;
 import com.googlecode.leptonica.android.Binarize;
 import com.googlecode.leptonica.android.Convert;
+import com.googlecode.leptonica.android.Enhance;
 import com.googlecode.leptonica.android.Pix;
 import com.googlecode.leptonica.android.ReadFile;
 import com.googlecode.leptonica.android.WriteFile;
