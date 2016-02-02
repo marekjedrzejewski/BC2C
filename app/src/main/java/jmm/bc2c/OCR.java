@@ -5,9 +5,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
+
 import java.io.IOException;
 
 public class OCR {
@@ -28,7 +28,7 @@ public class OCR {
                     ExifInterface.TAG_ORIENTATION,
                     ExifInterface.ORIENTATION_NORMAL);
 
-            Log.v("OCRed", "Orient: " + exifOrientation);
+            //Log.v("OCRed", "Orient: " + exifOrientation);
 
             int rotate = 0;
 
@@ -44,7 +44,7 @@ public class OCR {
                     break;
             }
 
-            Log.v("OCRed", "Rotation: " + rotate);
+            //Log.v("OCRed", "Rotation: " + rotate);
 
             if (rotate != 0) {
 
@@ -62,7 +62,7 @@ public class OCR {
 
 
         } catch (IOException e) {
-            Log.e("OCRed", "Couldn't correct orientation: " + e.toString());
+            //Log.e("OCRed", "Couldn't correct orientation: " + e.toString());
         }
 
         // Convert to ARGB_8888, required by tess
@@ -70,7 +70,7 @@ public class OCR {
         // _image.setImageBitmap( bitmap );
 
 
-        Log.v("OCRed", "Before baseApi");
+        //Log.v("OCRed", "Before baseApi");
         TessBaseAPI baseApi = new TessBaseAPI();
         //baseApi.setDebug(true);
         baseApi.init(MainActivity.DATA_PATH, MainActivity.LANG);
@@ -100,7 +100,7 @@ public class OCR {
         // We will display a stripped out trimmed alpha-numeric version of it (if lang is eng)
         // so that garbage doesn't make it to the display.
 
-        Log.v("OCRed", "OCRED TEXT: " + recognizedText);
+        //Log.v("OCRed", "OCRED TEXT: " + recognizedText);
 
         if ( MainActivity.LANG.equalsIgnoreCase("eng") ) {
             recognizedText = recognizedText.replaceAll("[^a-zA-Z0-9]+", " ");
@@ -140,11 +140,11 @@ class OCRTask extends AsyncTask<Void,Void,String[]>{
     @Override
     protected String[] doInBackground(Void... params) {
         OCR ocr = new OCR();
-        Log.d("OCT","Before OCR");
+        //Log.d("OCT","Before OCR");
         String[] results = new String[2];
         results[0] = ocr.PerformOCR(IntentStorage.CroppedNamePath,OCR.Type.Name);
         results[1] = ocr.PerformOCR(IntentStorage.CroppedPhonePath,OCR.Type.Number);
-        Log.d("OCT", "After OCR");
+        //Log.d("OCT", "After OCR");
         return results;
     }
 }

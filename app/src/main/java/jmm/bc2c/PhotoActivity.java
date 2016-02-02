@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -161,15 +160,15 @@ public class PhotoActivity extends AppCompatActivity {
 
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
-                        Log.d("Event", "ACTION_DOWN - " + x + " : " + y);
+                        //Log.d("Event", "ACTION_DOWN - " + x + " : " + y);
                         setStartPoints((ImageView) iv, photoImageBitmap, x, y);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        Log.d("Event", "ACTION_MOVE - " + x + " : " + y);
+                        //Log.d("Event", "ACTION_MOVE - " + x + " : " + y);
                         drawSelection((ImageView) iv, photoImageBitmap, x, y);
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d("Event", "ACTION_UP - " + x + " : " + y);
+                        //Log.d("Event", "ACTION_UP - " + x + " : " + y);
                         drawSelection((ImageView) iv, photoImageBitmap, x, y);
                         finalizeSelection();
                         break;
@@ -207,8 +206,8 @@ public class PhotoActivity extends AppCompatActivity {
         paintImageCanvas.drawRect(startX, startY, currentX, currentY, paint);
         paintImageView.invalidate();
 
-        Log.d("Event", x + " : " + y + " / " + iv.getWidth() + " : " + iv.getHeight() + "\n" +
-                startX + "-" + currentX + " : " + startY + "-" + currentY + " / " + bm.getWidth() + " : " + bm.getHeight());
+        //Log.d("Event", x + " : " + y + " / " + iv.getWidth() + " : " + iv.getHeight() + "\n" +
+                //startX + "-" + currentX + " : " + startY + "-" + currentY + " / " + bm.getWidth() + " : " + bm.getHeight());
     }
 
     private void redrawSelections() {
@@ -294,9 +293,9 @@ public class PhotoActivity extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
             fos.close();
         } catch (FileNotFoundException e) {
-            Log.e("Exception", "File not found: " + e.getMessage());
+            //Log.e("Exception", "File not found: " + e.getMessage());
         } catch (IOException e) {
-            Log.e("Exception", "Error accessing file: " + e.getMessage());
+            //Log.e("Exception", "Error accessing file: " + e.getMessage());
         }
 
         return file;
